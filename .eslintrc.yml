@@ -1,0 +1,109 @@
+parser: "@typescript-eslint/parser"
+parserOptions:
+  sourceType: module
+plugins:
+  - "@typescript-eslint/eslint-plugin"
+extends:
+  - "plugin:@typescript-eslint/recommended"
+  - "plugin:prettier/recommended"
+root: true
+env:
+  node: true
+  jest: true
+rules:
+  "@typescript-eslint/explicit-function-return-type": "off"
+  "@typescript-eslint/explicit-module-boundary-types": "off"
+  "@typescript-eslint/no-explicit-any": "off"
+  "@typescript-eslint/ban-types":
+    - error
+    - types:
+        String: true
+        Boolean: true
+        Number: true
+        Symbol: true
+        "{}": false
+        Object: false
+        object: false
+        Function: true
+      extendDefaults: true
+  "@typescript-eslint/quotes":
+    - error
+    - double
+    - avoidEscape: true
+      allowTemplateLiterals: true
+  "@typescript-eslint/naming-convention":
+    - error
+    - selector: default
+      format:
+        - camelCase
+      leadingUnderscore: allow
+      trailingUnderscore: allow
+    - selector: variable
+      format:
+        - camelCase
+      leadingUnderscore: allow
+      trailingUnderscore: allow
+    - selector: variable
+      format:
+        - camelCase
+      modifiers:
+        - global
+      leadingUnderscore: allow
+      trailingUnderscore: allow
+    - selector: variable
+      modifiers:
+        - destructured
+      format: null
+    - selector: objectLiteralProperty
+      format: null
+    - selector: typeLike
+      format:
+        - PascalCase
+    - selector: memberLike
+      modifiers:
+        - private
+      format:
+        - camelCase
+    - selector: parameter
+      format:
+        - camelCase
+      leadingUnderscore: allow
+    - selector: function
+      format:
+        - camelCase
+      leadingUnderscore: allow
+    - selector: classProperty
+      format:
+        - camelCase
+      leadingUnderscore: allow
+    - selector: enumMember
+      format: null
+    - selector: 0
+      format: null
+    - selector: method
+      format:
+        - camelCase
+      leadingUnderscore: allow
+    - selector: interface
+      format:
+        - PascalCase
+      custom:
+        regex: "^I[A-Z]"
+        match: false
+    - selector: enum
+      format:
+        - PascalCase
+      custom:
+        regex: "^I[A-Z]"
+        match: false
+  curly:
+    - error
+  eqeqeq:
+    - error
+  arrow-parens:
+    - error
+  ignorePatterns:
+    - "*.js"
+    - dist
+    - test
+    - envs
