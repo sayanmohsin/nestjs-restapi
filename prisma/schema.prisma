@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  male
+  female
+  notApplicable
+}
+
+model User {
+  userId        String       @id @default(uuid())
+  firstName     String
+  middleName    String?
+  lastName      String
+  email         String
+  password      String
+  suffix        String?
+  phone         String?
+  dob           String?
+  photoId       String?
+  userConfirmed Boolean?
+  gender        Gender?
+  refreshToken  String?
+  logs          String[]
+  roles         UserOnRole[]
+  tenantRoles   Role[]
+  merchant      User?        @relation("MerchantUser", fields: [merchantId], references: [userId])
+  merchantId    String?
+  merchantUsers User[]       @relation("MerchantUser")
+  isActive      Boolean?     @default(true)
+  createdAt     DateTime?    @default(now())
+  updatedAt     DateTime?    @updatedAt
+
+  @@map("user")
+}
+
+model Role {
+  roleId          String           @id @default(uuid())
+  name            String
+  description     String
+  isSystem        Boolean          @default(false)
+  isActive        Boolean?         @default(true)
+  tenant          User?            @relation(fields: [tenantId], references: [userId])
+  tenantId        String?
+  permissionRoles RoleOnResource[]
+  userRoles       UserOnRole[]
+  createdAt       DateTime?        @default(now())
+  updatedAt       DateTime?        @updatedAt
+
+  @@map("role")
+}
+
+model UserOnRole {
+  user      User      @relation(fields: [userId], references: [userId])
+  userId    String
+  role      Role      @relation(fields: [roleId], references: [roleId])
+  roleId    String
+  isActive  Boolean?  @default(true)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@id([userId, roleId])
+  @@map("userOnRole")
+}
+
+model Resource {
+  resourceId    String           @id @default(uuid())
+  name          String
+  isActive      Boolean?         @default(true)
+  createdAt     DateTime?        @default(now())
+  updatedAt     DateTime?        @updatedAt
+  resourceRoles RoleOnResource[]
+
+  @@map("resource")
+}
+
+model RoleOnResource {
+  roleId     String
+  role       Role      @relation(fields: [roleId], references: [roleId])
+  resource   Resource  @relation(fields: [resourceId], references: [resourceId])
+  resourceId String
+  isActive   Boolean?  @default(true)
+  createdAt  DateTime? @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@id([roleId, resourceId])
+  @@map("roleOnResource")
+}
+
+enum PhoneType {
+  Cell
+  Home
+  Office
+}
+
+model Address {
+  addressId String    @id @default(uuid())
+  name      String
+  address1  String
+  address2  String?
+  city      String
+  region    String
+  country   String
+  phone     String
+  phoneType PhoneType @default(Cell)
+  isActive  Boolean?  @default(true)
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+
+  @@map("address")
+}

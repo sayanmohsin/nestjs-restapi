@@ -1,34 +1,35 @@
-# Node.js
-node_modules/
-npm-debug.log
-yarn-error.log
-package-lock.json
-yarn.lock
-
-# Compiled output
-dist/
-
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# Testing
-coverage/
-
-# IDE and Editor files
-.vscode/
-.idea/
+# compiled output
+/dist
+/node_modules
 
 # Logs
-logs/
+logs
 *.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
 
-# Dependencies
-# You might want to uncomment the following lines if using Prisma and PostgreSQL or other databases
-# /prisma/.env
-# /prisma/.env.test
-
-# Miscellaneous
+# OS
 .DS_Store
-Thumbs.db
+
+# Tests
+/coverage
+/.nyc_output
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
