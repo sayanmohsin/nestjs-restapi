@@ -1,9 +1,9 @@
 # NestJS REST API Service Boilerplate
 
 ![License](https://img.shields.io/github/license/your-username/nestjs-restapi)
-![NestJS Version](https://img.shields.io/badge/NestJS-%5E8.0.0-red)
-![Prisma Version](https://img.shields.io/badge/Prisma-%5E2.0.0-blue)
-![Node.js Version](https://img.shields.io/badge/Node.js-%5E14.0.0-green)
+![NestJS Version](https://img.shields.io/badge/NestJS-%5E10.0.0-red)
+![Prisma Version](https://img.shields.io/badge/Prisma-%5E5.0.0-blue)
+![Node.js Version](https://img.shields.io/badge/Node.js-%5E18.0.0-green)
 
 ## Description
 
@@ -24,7 +24,7 @@ This is a boilerplate for building RESTful APIs using NestJS framework. The boil
 
 ## Requirements
 
-- Node.js (>= 14.0.0)
+- Node.js (>= 16.0.0)
 - npm (>= 6.0.0)
 - Docker (optional, for deployment)
 
