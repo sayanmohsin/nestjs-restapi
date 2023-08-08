@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # NestJS REST API Service Boilerplate
 
 ![License](https://img.shields.io/github/license/your-username/nestjs-restapi)
