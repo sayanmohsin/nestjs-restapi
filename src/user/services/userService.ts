@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { RoleService } from "./roleService";
-import { PrismaService } from "../../prisma/prisma.service";
-import { hash } from "argon2";
+import { Injectable } from '@nestjs/common';
+import { RoleService } from './roleService';
+import { PrismaService } from '../../prisma/prisma.service';
+import { hash } from 'argon2';
 
 @Injectable({})
 export class UserService {
@@ -11,20 +11,19 @@ export class UserService {
   ) {}
 
   async getUserById(userId: string) {
-    const merchant =
-      await this.prismaService.user.findFirst({
-        where: {
-          userId,
-          isActive: true,
-        },
-        include: {
-          roles: {
-            include: {
-              role: true,
-            },
+    const merchant = await this.prismaService.user.findFirst({
+      where: {
+        userId,
+        isActive: true,
+      },
+      include: {
+        roles: {
+          include: {
+            role: true,
           },
         },
-      });
+      },
+    });
 
     if (!merchant) {
       return null;
@@ -32,16 +31,11 @@ export class UserService {
 
     return {
       ...merchant,
-      roles: this.roleService.generateRolesArray(
-        merchant.roles,
-      ),
+      roles: this.roleService.generateRolesArray(merchant.roles),
     };
   }
 
-  async updateRefreshToken(
-    userId: string,
-    refreshToken: string,
-  ) {
+  async updateRefreshToken(userId: string, refreshToken: string) {
     return this.prismaService.user.update({
       where: {
         userId,

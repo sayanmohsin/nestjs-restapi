@@ -1,7 +1,6 @@
-import { HttpExceptionResponse } from "./httpExceptionResponse.interface";
+import { HttpExceptionResponse } from './httpExceptionResponse.interface';
 
-export interface CustomHttpExceptionResponse
-  extends HttpExceptionResponse {
+export interface CustomHttpExceptionResponse extends HttpExceptionResponse {
   path: string;
   method: string;
   message: string;

@@ -1,21 +1,14 @@
-import {
-  Injectable,
-  HttpException,
-  HttpStatus,
-  Logger,
-} from "@nestjs/common";
-import { hash } from "argon2";
-import { MerchantSignupDto } from "../../auth/dto";
-import { PrismaService } from "../../prisma/prisma.service";
-import { UserService } from "./userService";
-import { RoleService } from "./roleService";
-import { userWithPasswordSelectApi } from "../constants";
+import { Injectable, HttpException, HttpStatus, Logger } from '@nestjs/common';
+import { hash } from 'argon2';
+import { MerchantSignupDto } from '../../auth/dto';
+import { PrismaService } from '../../prisma/prisma.service';
+import { UserService } from './userService';
+import { RoleService } from './roleService';
+import { userWithPasswordSelectApi } from '../constants';
 
 @Injectable({})
 export class MerchantService {
-  private readonly logger = new Logger(
-    MerchantService.name,
-  );
+  private readonly logger = new Logger(MerchantService.name);
   constructor(
     private readonly prismaService: PrismaService,
     private readonly userService: UserService,
@@ -29,9 +22,9 @@ export class MerchantService {
     ]);
 
     if (!merchantRole) {
-      this.logger.log("Merchant role is missing");
+      this.logger.log('Merchant role is missing');
       throw new HttpException(
-        "Something wrong",
+        'Something wrong',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -56,27 +49,24 @@ export class MerchantService {
     });
     return {
       ...merchant,
-      roles: this.roleService.generateRolesArray(
-        merchant.roles,
-      ),
+      roles: this.roleService.generateRolesArray(merchant.roles),
     };
   }
 
   async getMerchantByEmail(email: string) {
-    const merchant =
-      await this.prismaService.user.findFirst({
-        where: {
-          email,
-          isActive: true,
-        },
-        include: {
-          roles: {
-            include: {
-              role: true,
-            },
+    const merchant = await this.prismaService.user.findFirst({
+      where: {
+        email,
+        isActive: true,
+      },
+      include: {
+        roles: {
+          include: {
+            role: true,
           },
         },
-      });
+      },
+    });
 
     if (!merchant) {
       return null;
@@ -84,26 +74,21 @@ export class MerchantService {
 
     return {
       ...merchant,
-      roles: this.roleService.generateRolesArray(
-        merchant.roles,
-      ),
+      roles: this.roleService.generateRolesArray(merchant.roles),
     };
   }
 
   async getMerchantByIdWithPassword(userId: string) {
-    const merchant =
-      await this.prismaService.user.findUnique({
-        where: {
-          userId,
-        },
-        select: userWithPasswordSelectApi,
-      });
+    const merchant = await this.prismaService.user.findUnique({
+      where: {
+        userId,
+      },
+      select: userWithPasswordSelectApi,
+    });
 
     return {
       ...merchant,
-      roles: this.roleService.generateRolesArray(
-        merchant.roles,
-      ),
+      roles: this.roleService.generateRolesArray(merchant.roles),
     };
   }
 }

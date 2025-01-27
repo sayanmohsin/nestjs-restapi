@@ -1,2 +1,2 @@
-export * from "./customHttpExceptionResponse.interface";
-export * from "./httpExceptionResponse.interface";
+export * from './customHttpExceptionResponse.interface';
+export * from './httpExceptionResponse.interface';

@@ -5,14 +5,12 @@ import {
   HttpException,
   HttpStatus,
   BadRequestException,
-} from "@nestjs/common";
-import { HttpAdapterHost } from "@nestjs/core";
+} from '@nestjs/common';
+import { HttpAdapterHost } from '@nestjs/core';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
-  constructor(
-    private readonly httpAdapterHost: HttpAdapterHost,
-  ) {}
+  constructor(private readonly httpAdapterHost: HttpAdapterHost) {}
 
   catch(exception: unknown, host: ArgumentsHost): void {
     const { httpAdapter } = this.httpAdapterHost;
@@ -26,21 +24,17 @@ export class AllExceptionFilter implements ExceptionFilter {
 
     const validationMessages =
       exception instanceof BadRequestException
-        ? exception["response"]["message"]
+        ? exception['response']['message']
         : [];
 
     const responseBody = {
       statusCode: httpStatus,
-      message: exception["message"] ?? "",
+      message: exception['message'] ?? '',
       validationMessages,
       timestamp: new Date().toISOString(),
       path: httpAdapter.getRequestUrl(ctx.getRequest()),
     };
 
-    httpAdapter.reply(
-      ctx.getResponse(),
-      responseBody,
-      httpStatus,
-    );
+    httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);
   }
 }

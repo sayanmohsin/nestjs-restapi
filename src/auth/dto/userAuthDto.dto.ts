@@ -4,8 +4,8 @@ import {
   IsOptional,
   IsString,
   Validate,
-} from "class-validator";
-import { IsUniqueMerchantEmailConstraint } from "../../shared/validators";
+} from 'class-validator';
+import { IsUniqueMerchantEmailConstraint } from '../../shared/validators';
 
 export class UserAuthDto {
   @IsEmail()

@@ -1,14 +1,14 @@
-import { Controller, Get } from "@nestjs/common";
+import { Controller, Get } from '@nestjs/common';
 import {
   HealthCheckService,
   HealthCheck,
   MemoryHealthIndicator,
-} from "@nestjs/terminus";
-import { Public } from "../auth/decorators";
-import { PrismaHealthIndicator } from "./prisma.health";
+} from '@nestjs/terminus';
+import { Public } from '../auth/decorators';
+import { PrismaHealthIndicator } from './prisma.health';
 
 @Public()
-@Controller("health")
+@Controller('health')
 export class HealthController {
   constructor(
     private health: HealthCheckService,
@@ -16,16 +16,12 @@ export class HealthController {
     private prismaHealthIndicator: PrismaHealthIndicator,
   ) {}
 
-  @Get("/")
+  @Get('/')
   @HealthCheck()
   check() {
     return this.health.check([
-      () =>
-        this.memory.checkHeap(
-          "memory_heap",
-          150 * 1024 * 1024,
-        ),
-      () => this.prismaHealthIndicator.isHealthy("db"),
+      () => this.memory.checkHeap('memory_heap', 150 * 1024 * 1024),
+      () => this.prismaHealthIndicator.isHealthy('db'),
     ]);
   }
 }

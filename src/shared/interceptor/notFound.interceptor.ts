@@ -4,20 +4,15 @@ import {
   Injectable,
   NestInterceptor,
   NotFoundException,
-} from "@nestjs/common";
-import { isEmpty } from "lodash";
-import { Observable, tap } from "rxjs";
+} from '@nestjs/common';
+import { isEmpty } from 'lodash';
+import { Observable, tap } from 'rxjs';
 
 @Injectable()
-export class NotFoundInterceptor
-  implements NestInterceptor
-{
+export class NotFoundInterceptor implements NestInterceptor {
   constructor(private errorMessage: string) {}
 
-  intercept(
-    context: ExecutionContext,
-    next: CallHandler,
-  ): Observable<any> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       tap((data) => {
         if (!data || isEmpty(data)) {

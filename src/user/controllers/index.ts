@@ -1,1 +1,1 @@
-export * from "./merchantController";
+export * from './merchantController';

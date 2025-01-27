@@ -1,16 +1,11 @@
-import {
-  IsString,
-  IsOptional,
-  IsNotEmpty,
-  Validate,
-} from "class-validator";
-import { UpsertAddressDto } from "./upsertAddress.dto";
-import { IsIdExistConstraint } from "../../shared/validators";
+import { IsString, IsOptional, IsNotEmpty, Validate } from 'class-validator';
+import { UpsertAddressDto } from './upsertAddress.dto';
+import { IsIdExistConstraint } from '../../shared/validators';
 
 export class UpsertCompanyDto {
   @IsOptional()
   @IsString()
-  @Validate(IsIdExistConstraint, ["company", "companyId"])
+  @Validate(IsIdExistConstraint, ['company', 'companyId'])
   companyId?: string;
 
   @IsString()

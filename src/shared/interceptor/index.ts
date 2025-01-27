@@ -1,2 +1,2 @@
-export * from "./notFound.interceptor";
-export * from "./transform.interceptor";
+export * from './notFound.interceptor';
+export * from './transform.interceptor';

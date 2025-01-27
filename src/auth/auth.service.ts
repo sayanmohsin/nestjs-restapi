@@ -1,19 +1,10 @@
-import {
-  Injectable,
-  ForbiddenException,
-} from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
-import { verify } from "argon2";
-import {
-  MerchantService,
-  UserService,
-} from "../user/services";
-import { MerchantSignupDto, UserAuthDto } from "./dto";
-import {
-  AuthResponse,
-  AuthTokenPayload,
-} from "./interfaces";
-import { ConfigService } from "@nestjs/config";
+import { Injectable, ForbiddenException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { verify } from 'argon2';
+import { MerchantService, UserService } from '../user/services';
+import { MerchantSignupDto, UserAuthDto } from './dto';
+import { AuthResponse, AuthTokenPayload } from './interfaces';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -25,18 +16,13 @@ export class AuthService {
   ) {}
 
   merchantJwtVerify(userId: string) {
-    return this.merchantService.getMerchantByIdWithPassword(
-      userId,
-    );
+    return this.merchantService.getMerchantByIdWithPassword(userId);
   }
 
   async merchantSignup(
     newMerchantData: MerchantSignupDto,
   ): Promise<AuthResponse> {
-    const merchant =
-      await this.merchantService.merchantSignUp(
-        newMerchantData,
-      );
+    const merchant = await this.merchantService.merchantSignUp(newMerchantData);
 
     const user: AuthTokenPayload = {
       userId: merchant.userId,
@@ -46,33 +32,20 @@ export class AuthService {
       roles: merchant.roles,
     };
 
-    const { accessToken, refreshToken } =
-      await this.generateTokens(user);
+    const { accessToken, refreshToken } = await this.generateTokens(user);
 
-    await this.userService.updateRefreshToken(
-      merchant.userId,
-      refreshToken,
-    );
+    await this.userService.updateRefreshToken(merchant.userId, refreshToken);
 
     return { user, accessToken, refreshToken };
   }
 
-  async merchantLogin(
-    userAuthDto: UserAuthDto,
-  ): Promise<AuthResponse> {
-    const merchant =
-      await this.merchantService.getMerchantByEmail(
-        userAuthDto.email,
-      );
+  async merchantLogin(userAuthDto: UserAuthDto): Promise<AuthResponse> {
+    const merchant = await this.merchantService.getMerchantByEmail(
+      userAuthDto.email,
+    );
 
-    if (
-      !merchant ||
-      !(await verify(
-        merchant.password,
-        userAuthDto.password,
-      ))
-    ) {
-      throw new ForbiddenException("Credentials incorrect");
+    if (!merchant || !(await verify(merchant.password, userAuthDto.password))) {
+      throw new ForbiddenException('Credentials incorrect');
     }
 
     const user: AuthTokenPayload = {
@@ -83,41 +56,27 @@ export class AuthService {
       roles: merchant.roles,
     };
 
-    const { accessToken, refreshToken } =
-      await this.generateTokens(user);
+    const { accessToken, refreshToken } = await this.generateTokens(user);
 
-    await this.userService.updateRefreshToken(
-      merchant.userId,
-      refreshToken,
-    );
+    await this.userService.updateRefreshToken(merchant.userId, refreshToken);
 
     return { user, accessToken, refreshToken };
   }
 
-  async generateTokens(
-    signData: AuthTokenPayload,
-  ): Promise<{
+  async generateTokens(signData: AuthTokenPayload): Promise<{
     accessToken: string;
     refreshToken: string;
   }> {
     const [accessToken, refreshToken] = await Promise.all([
       this.signToken(
         signData,
-        this.configService.get<string>(
-          "JWT_ACCESS_TOKEN_SECRET",
-        ),
-        this.configService.get<string>(
-          "JWT_ACCESS_TOKEN_EXPIRY",
-        ),
+        this.configService.get<string>('JWT_ACCESS_TOKEN_SECRET'),
+        this.configService.get<string>('JWT_ACCESS_TOKEN_EXPIRY'),
       ),
       this.signToken(
         signData,
-        this.configService.get<string>(
-          "JWT_REFRESH_TOKEN_SECRET",
-        ),
-        this.configService.get<string>(
-          "JWT_REFRESH_TOKEN_EXPIRY",
-        ),
+        this.configService.get<string>('JWT_REFRESH_TOKEN_SECRET'),
+        this.configService.get<string>('JWT_REFRESH_TOKEN_EXPIRY'),
       ),
     ]);
     return { accessToken, refreshToken };
@@ -134,25 +93,15 @@ export class AuthService {
     });
   }
 
-  async refreshTokens(
-    userId: string,
-    refreshTokenRaw: string,
-  ) {
-    const userData = await this.userService.getUserById(
-      userId,
-    );
+  async refreshTokens(userId: string, refreshTokenRaw: string) {
+    const userData = await this.userService.getUserById(userId);
 
     if (!userData || !userData.refreshToken) {
-      throw new ForbiddenException("Access Denied");
+      throw new ForbiddenException('Access Denied');
     }
 
-    if (
-      !(await verify(
-        userData.refreshToken,
-        refreshTokenRaw,
-      ))
-    ) {
-      throw new ForbiddenException("Access Denied");
+    if (!(await verify(userData.refreshToken, refreshTokenRaw))) {
+      throw new ForbiddenException('Access Denied');
     }
 
     const user: AuthTokenPayload = {
@@ -163,13 +112,9 @@ export class AuthService {
       roles: userData.roles,
     };
 
-    const { accessToken, refreshToken } =
-      await this.generateTokens(user);
+    const { accessToken, refreshToken } = await this.generateTokens(user);
 
-    await this.userService.updateRefreshToken(
-      user.userId,
-      refreshToken,
-    );
+    await this.userService.updateRefreshToken(user.userId, refreshToken);
 
     return { user, accessToken, refreshToken };
   }

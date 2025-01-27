@@ -1,1 +1,1 @@
-export * from "./dbSelectsConstant";
+export * from './dbSelectsConstant';

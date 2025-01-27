@@ -1,10 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
   const getRole = await prisma.role.findFirst({
     where: {
-      name: "Merchant",
+      name: 'Merchant',
       isSystem: true,
       isActive: true,
       tenantId: null,
@@ -14,8 +14,8 @@ async function main() {
   if (!getRole) {
     await prisma.role.create({
       data: {
-        name: "Merchant",
-        description: "Merchant role",
+        name: 'Merchant',
+        description: 'Merchant role',
         tenantId: null,
         isSystem: true,
         isActive: true,

@@ -1,40 +1,32 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  Logger,
-} from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import {
   ValidationArguments,
   ValidatorConstraint,
   ValidatorConstraintInterface,
-} from "class-validator";
-import { PrismaService } from "../../prisma/prisma.service";
-import { RoleService } from "../../user/services/roleService";
+} from 'class-validator';
+import { PrismaService } from '../../prisma/prisma.service';
+import { RoleService } from '../../user/services/roleService';
 
 @ValidatorConstraint({
-  name: "isUniqueMerchantEmail",
+  name: 'isUniqueMerchantEmail',
   async: true,
 })
 @Injectable()
 export class IsUniqueMerchantEmailConstraint
   implements ValidatorConstraintInterface
 {
-  private readonly logger = new Logger(
-    IsUniqueMerchantEmailConstraint.name,
-  );
+  private readonly logger = new Logger(IsUniqueMerchantEmailConstraint.name);
   constructor(
     private readonly prisma: PrismaService,
     private readonly roleService: RoleService,
   ) {}
   async validate(email: string) {
-    const merchantRole =
-      await this.roleService.getMerchantRole();
+    const merchantRole = await this.roleService.getMerchantRole();
 
     if (!merchantRole) {
-      this.logger.log("Merchant role is missing");
+      this.logger.log('Merchant role is missing');
       throw new HttpException(
-        "Something wrong",
+        'Something wrong',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
@@ -57,6 +49,6 @@ export class IsUniqueMerchantEmailConstraint
   }
 
   defaultMessage() {
-    return "Merchant email already exist";
+    return 'Merchant email already exist';
   }
 }

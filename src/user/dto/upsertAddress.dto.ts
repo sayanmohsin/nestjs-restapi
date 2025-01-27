@@ -1,16 +1,11 @@
-import { PhoneType } from "@prisma/client";
-import {
-  IsString,
-  IsOptional,
-  IsEnum,
-  Validate,
-} from "class-validator";
-import { IsIdExistConstraint } from "../../shared/validators";
+import { PhoneType } from '@prisma/client';
+import { IsString, IsOptional, IsEnum, Validate } from 'class-validator';
+import { IsIdExistConstraint } from '../../shared/validators';
 
 export class UpsertAddressDto {
   @IsOptional()
   @IsString()
-  @Validate(IsIdExistConstraint, ["address", "addressId"])
+  @Validate(IsIdExistConstraint, ['address', 'addressId'])
   addressId?: string;
 
   @IsOptional()
